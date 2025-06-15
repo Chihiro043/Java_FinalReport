@@ -54,24 +54,25 @@ public class CheatingRule {
         return cheatMap.getOrDefault(player.getId(), false);
     }
 
+    // CheatingRule.java
+
     public static boolean canSeeHiddenCard(Player viewer, Player target) {
         if (viewer.getId().equals(target.getId())) return true;
+    
         if (!isCheating(viewer)) return false;
-
+    
         String v = viewer.getId();
         String t = target.getId();
-
+    
         // 雙向合作（C <-> D）
         if ((v.equals("C") && t.equals("D")) || (v.equals("D") && t.equals("C"))) return true;
-
-        // 單向偷看（B -> A）
-        // B 可偷看 A，但前提是 A 沒有出千（即：A 沒有反目）
-        if (v.equals("B") && t.equals("A")) {
-            return !isCheating(target);
-        }
+    
+        // B 偷看 A，但 A 沒有反目（還是棋子）
+        if (v.equals("B") && t.equals("A") && !isCheating(target)) return true;
+    
         return false;
-
     }
+
 
     public static boolean isDetectedByViewer(Player target, Player viewer) {
         String t = target.getId();
