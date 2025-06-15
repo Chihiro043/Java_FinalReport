@@ -17,4 +17,27 @@ public class DebtRule {
     public static boolean isValidDebt(int amount) {
         return amount >= MIN_DEBT && amount <= MAX_DEBT && amount % STEP == 0;
     }
+    
+    public static int getDebtForRole(String role) {
+        Random random = new Random();
+        switch (role) {
+            case "A":
+                return randomRange(18000000, 20000000);
+            case "B":
+                return randomRange(800000, 1200000); 
+            case "C":
+                return randomRange(25000000, 30000000); 
+            case "D":
+                return randomRange(10000000, 15000000); 
+            default:
+                return generateValidDebt(); 
+        }
+    }
+
+    private static int randomRange(int min, int max) {
+        int step = 10000;
+        int count = (max - min) / step + 1;
+        return min + (random.nextInt(count) * step);
+    }
+
 } 
