@@ -11,16 +11,9 @@ public class Round {
         System.out.println("\n========== 第 " + roundNum + " 輪開始 ==========");
 
         // 1. 更新每位玩家的回合狀態
-        System.out.println("[更新] 本回合初始資訊");
         for (Player p : players) {
             p.setCurrentRound(roundNum);
             p.resetForNewRound();
-        }
-        for (Player p : players) {
-            if (p.isUserControlled()) {
-                System.out.println("\n玩家 [" + p.getName() + "] 狀態總覽：");
-                p.showInfo();
-            }
         }
         
         // 2. 繳交出場費（ante）
@@ -37,21 +30,33 @@ public class Round {
         for (Player p : players) p.setVisibleCard(deck.drawCard());
         for (Player p : players) p.setHiddenCard(deck.drawCard());
 
-        // 4. 顯示所有玩家卡牌視角（GameView）
-        System.out.println("[看牌] 顯示當前可見手牌");
+        // 4. 各玩家依序輸入自己名稱，看自己的視角
+        System.out.println("[視角] 各玩家輪流查看自己的資訊");
         for (Player p : players) {
-            if (p.isUserControlled()) {
-            	 System.out.println("\n【" + p.getName() + " 的視角】");
-                GameView.showCardView(p, players);
-                System.out.print("（按下 Enter 切換下一位玩家視角）");
-                new Scanner(System.in).nextLine();
+            System.out.println("\n→ 換 [" + p.getName() + "] 操作，請輸入你的名稱：");
+            String inputName = scanner.nextLine();
+            while (!inputName.equals(p.getName())) {
+                System.out.print("名稱錯誤，請重新輸入：");
+                inputName = scanner.nextLine();
             }
+    
+            GameUtils.clearScreen();  // 清除畫面避免看到上一位玩家資料
+            System.out.println("【你的角色】：" + p.getName());
+            p.showInfo(); // 顯示債務、籌碼等初始狀態
+            System.out.println("【你能看到的卡牌視角】：");
+            GameView.showCardView(p, players);
+    
+            System.out.print("（按下 ENTER 結束並交給下一位玩家）");
+            scanner.nextLine();
+            GameUtils.clearScreen();
         }
+
 
         // 5. 下注階段
         Player dealer = players.get(dealerIndex);
         System.out.println("本輪莊家為：" + dealer.getName()+"開始下注:");
         System.out.println("[下注] 輪流進行下注");
+        
         Map<Player, List<Chip>> playerBets = new HashMap<>();
         for (Player p : players) {
             List<Chip> bet = p.isUserControlled()
@@ -67,7 +72,6 @@ public class Round {
                 activeBettors.add(entry.getKey());
             }
         }
-
         if (activeBettors.size() == 1 && activeBettors.get(0).equals(dealer)) {
             System.out.println("無人跟注，莊家 " + dealer.getName() + " 自動獲勝");
             ChipRule.rewardWinner(dealer, pot);
@@ -100,13 +104,6 @@ public class Round {
             System.out.println("本輪為平手，退還各自下注籌碼");
             ChipRule.rewardDraw(pot, players);
         }
-        
-        //7. 揭露手牌
-        System.out.println("\n 所有玩家的手牌揭曉：");
-        for (Player p : players) {
-            GameView.showSinglePlayerHand(p);  // 顯示每人明牌與暗牌
-        }
-
 
         System.out.println("========== 第 " + roundNum + " 輪結束 ==========\n");
         System.out.print("請按下 ENTER 繼續下一輪...");
