@@ -112,19 +112,25 @@ public class Round {
         new Scanner(System.in).nextLine();
     }
 
-    private static List<Chip> askUserBet(Player user) {
-        Scanner scanner= new Scanner(System.in);
-        int num = 0;
-        while (true) {
-            System.out.print(user.getName() + "，請輸入本輪下注籌碼數量（1～5）：");
-            try {
-                num = Integer.parseInt(scanner.nextLine());
-                if (ChipRule.canBet(user, num)) break;
-                System.out.println(" 數量非法/籌碼不足，請重新輸入。");
-            } catch (Exception e) {
-                System.out.println("請輸入合法整數！");
-            }
+   private static List<Chip> askUserBet(Player user) {
+    Scanner scanner = new Scanner(System.in);
+    int num = -1;
+    while (true) {
+        System.out.println("\n【下注階段】" + GameUtils.BLUE + user.getName() + GameUtils.RESET);
+        System.out.println("目前籌碼數：" + user.getChipCount() + " 枚，每枚面額：" + (user.getChips().isEmpty() ? "?" : user.getChips().get(0).getValue()) + " 元");
+        System.out.println(GameUtils.YELLOW + "輸入 0 可選擇棄牌。" + GameUtils.RESET);
+        System.out.print("請輸入本輪下注籌碼數量（1～5，或 0 表示棄牌）：");
+
+        try {
+            num = Integer.parseInt(scanner.nextLine());
+            if (num == 0) return new ArrayList<>(); // 棄牌
+            if (ChipRule.canBet(user, num)) break;
+            GameUtils.printColor(" 數量非法/籌碼不足，請重新輸入。", GameUtils.RED);
+        } catch (Exception e) {
+            GameUtils.printColor("請輸入合法整數！", GameUtils.RED);
         }
-        return ChipRule.bet(user, num);
     }
+    return ChipRule.bet(user, num);
+}
+
 }
