@@ -8,7 +8,7 @@ import java.util.Scanner;
 public class Round {
 
     public static void run(List<Player> players, int roundNum,int dealerIndex) {
-        System.out.println("\n========== 第 " + roundNum + " 輪開始 ==========");
+        System.out.println(GameUtils.YELLOW +"\n========== 第 " + roundNum + " 輪開始 =========="GameUtils.YELLOW );
 
         // 1. 更新每位玩家的回合狀態
         for (Player p : players) {
@@ -107,7 +107,7 @@ public class Round {
             ChipRule.rewardDraw(pot, players);
         }
 
-        System.out.println("========== 第 " + roundNum + " 輪結束 ==========\n");
+        System.out.println(GameUtils.YELLOW +"========== 第 " + roundNum + " 輪結束 ==========\n"+GameUtils.YELLOW );
         System.out.print("請按下 ENTER 繼續下一輪...");
         new Scanner(System.in).nextLine();
     }
