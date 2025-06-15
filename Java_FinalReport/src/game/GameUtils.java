@@ -9,6 +9,43 @@ import java.util.List;
 
 public class GameUtils {
 
+    public static void clearScreen() {
+        for (int i = 0; i < 30; i++) {
+            System.out.println();
+        }
+    }
+
+    public static void clearPlayerInfoAsGarbage(Player player) {
+        Random rand = new Random();
+        String chars = "@#%&*!?ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+        System.out.println("\n【已結束視角，以下為亂碼資訊保護】");
+
+        // 假裝亂碼債務與籌碼資訊
+        System.out.print("債務金額：");
+        printGarbageLine(1, chars, rand);
+        System.out.print("籌碼總數：");
+        printGarbageLine(1, chars, rand);
+
+        // 假裝亂碼明牌與暗牌
+        System.out.println("明牌：");
+        printGarbageLine(1, chars, rand);
+        System.out.println("暗牌：");
+        printGarbageLine(1, chars, rand);
+
+        System.out.println("\n【請將裝置交給下一位玩家】");
+    }
+
+    private static void printGarbageLine(int lines, String chars, Random rand) {
+        for (int i = 0; i < lines; i++) {
+            StringBuilder sb = new StringBuilder();
+            for (int j = 0; j < 20; j++) {
+                sb.append(chars.charAt(rand.nextInt(chars.length())));
+            }
+            System.out.println("　" + sb);
+        }
+    }
+
     //構建電腦控制之角色所需的即時資訊（GameContext）。
     public static GameContext buildContext(Player self, List<Player> allPlayers, int roundNumber) {
         GameContext ctx = new GameContext(self);
