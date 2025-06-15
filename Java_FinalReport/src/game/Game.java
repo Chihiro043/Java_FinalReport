@@ -32,10 +32,11 @@ public class Game {
 
         // 3. 設定債務（含 C、D 調換邏輯）
         for (Player p : players) {
-            int debt = DebtRule.generateValidDebt();
+            int debt = DebtRule.getDebtForRole(p.getId());
             p.setDeclaredAmount(debt);
             p.setDebt(debt);
         }
+
         System.out.println("\n本場角色分配與債務金額如下：");
         for (Player p : players) {
             System.out.printf("→ [%s] %s：債務 %d 元，初始籌碼單價：%d 元\n",
