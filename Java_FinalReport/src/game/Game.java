@@ -8,7 +8,7 @@ public class Game {
 
     private static final int TOTAL_ROUNDS = 10;
     public static void startGame() {
-        System.out.println("債務整理大會－雙重印地安撲克");
+        System.out.println(GameUtils.RED+"債務整理大會－雙重印地安撲克"+GameUtils.RED);
         
         // 規則展示
         InstructionView.showInstructions();
@@ -146,9 +146,8 @@ public class Game {
         Player first = ranked.get(0);
         Player last = ranked.get(ranked.size() - 1);
 
-        System.out.println("\n📜 結局劇情演出：");
-        System.out.println(first.getId() + "（" + first.getName() + "）：" + "這就是勝利者的姿態。");
-        System.out.println(last.getId() + "（" + last.getName() + "）：" + "怎麼會……我竟然變成敗犬？");
+        System.out.println(first.getId() + "（" + first.getName() + "）：" + "這就是勝利者的姿態...!!");
+        System.out.println(last.getId() + "（" + last.getName() + "）：" + "竟然變成敗犬了嘛!?!?");
         System.out.println("\n-\n這場賭局落幕，但你還能承受下一場嗎？");
     }
 }
