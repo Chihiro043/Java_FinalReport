@@ -30,26 +30,28 @@ public class Round {
         for (Player p : players) p.setVisibleCard(deck.drawCard());
         for (Player p : players) p.setHiddenCard(deck.drawCard());
 
-        // 4. 各玩家依序輸入自己名稱，看自己的視角
-        System.out.println("[視角] 各玩家輪流查看自己的資訊");
+       // 4. 輪流顯示玩家視角
         for (Player p : players) {
-            System.out.println("\n→ 換 [" + p.getName() + "] 操作，請輸入你的名稱：");
-            String inputName = scanner.nextLine();
-            while (!inputName.equals(p.getName())) {
-                System.out.print("名稱錯誤，請重新輸入：");
-                inputName = scanner.nextLine();
+            if (p.isUserControlled()) {
+                System.out.println("\n【" + p.getName() + " 請上場】請按 ENTER 查看你的資訊");
+                scanner.nextLine();
+
+                GameUtils.clearScreen();  // 防止前一位殘留畫面
+                System.out.println("【" + p.getName() + " 的視角】");
+                GameView.showCardView(p, players);  // 顯示牌與視角
+                p.showInfo(); // 顯示該玩家狀態
+
+                System.out.println("\n【請按 ENTER 結束你的查看，並交給下一位玩家】");
+                scanner.nextLine();
+
+                GameUtils.clearPlayerInfoAsGarbage(p);  // 將資訊轉為亂碼
+                System.out.print("（下一位玩家準備好後，請按 ENTER 進入）");
+                scanner.nextLine();
+
+                GameUtils.clearScreen(); // 清空亂碼
             }
-    
-            GameUtils.clearScreen();  // 清除畫面避免看到上一位玩家資料
-            System.out.println("【你的角色】：" + p.getName());
-            p.showInfo(); // 顯示債務、籌碼等初始狀態
-            System.out.println("【你能看到的卡牌視角】：");
-            GameView.showCardView(p, players);
-    
-            System.out.print("（按下 ENTER 結束並交給下一位玩家）");
-            scanner.nextLine();
-            GameUtils.clearScreen();
         }
+
 
 
         // 5. 下注階段
